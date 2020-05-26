@@ -555,15 +555,15 @@ ServerApp::startServer()
         m_server->setListener(listener);
         m_listener = listener;
         updateStatus();
-        LOG((CLOG_NOTE "started server (%s), waiting for clients", family));
+        LOG((CLOG_PRINT "started server (%s), waiting for clients", family));
         m_serverState = kStarted;
         return true;
     }
     catch (XSocketAddressInUse& e) {
-        LOG((CLOG_WARN "cannot listen for clients: %s", e.what()));
+        LOG((CLOG_ERR "cannot listen for clients: %s", e.what()));
         closeClientListener(listener);
         updateStatus(String("cannot listen for clients: ") + e.what());
-        retryTime = 10.0;
+        retryTime = 1.0;
     }
     catch (XBase& e) {
         LOG((CLOG_CRIT "failed to start server: %s", e.what()));
